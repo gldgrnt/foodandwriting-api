@@ -18,8 +18,8 @@ router.get('/', async (req, res) => {
 /**
  * Get comments by ID
  */
-router.get('/:id', async (req, res) => {
-    const id = parseInt(req.params.id)
+router.get('/:postId', async (req, res) => {
+    const postId = req.params.postId
 
     try {
         const { rows } = await db.query('SELECT * FROM comments WHERE post_id = $1 ORDER BY date DESC', [postId])
