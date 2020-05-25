@@ -1,7 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
-const port = 3000
 const mountRoutes = require('./routes')
 
 app.use(bodyParser.json())
@@ -19,4 +18,7 @@ mountRoutes(app)
 // Listeners
 app.listen(port, () => {
     console.log(`App is running on port ${port}`)
+})
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`Server listening`)
 })
