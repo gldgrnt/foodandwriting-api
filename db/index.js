@@ -11,10 +11,10 @@ const connectionString = isProduction
 
 const pool = new Pool({
     connectionString,
-    ssl: isProduction
+    // ssl: isProduction
 })
 
 
 module.exports = {
-    query: (string, params) => pool.query(string, params),
+    query: (string, params) => pool.query(string, params)
 }
