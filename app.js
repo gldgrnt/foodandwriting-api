@@ -6,6 +6,8 @@ const mountRoutes = require('./routes')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// Set up cors
 app.use(cors())
 
 // Routes

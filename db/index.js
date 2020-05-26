@@ -11,7 +11,6 @@ const connectionString = isProduction
 
 const pool = new Pool({
     connectionString,
-    // ssl: isProduction
 })
 
 
