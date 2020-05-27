@@ -1,0 +1,1 @@
+exports.CommentsController = require('./comments')

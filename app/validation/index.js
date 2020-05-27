@@ -1,0 +1,1 @@
+exports.commentValidation = require('./comments')

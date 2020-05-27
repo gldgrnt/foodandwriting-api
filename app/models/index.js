@@ -1,0 +1,1 @@
+exports.CommentsModel = require('./comments')
