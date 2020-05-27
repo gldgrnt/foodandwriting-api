@@ -5,8 +5,10 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node app.js",
-        "dev": "nodemon app.js"
+        "start": "node app/app.js",
+        "dev": "nodemon app/app.js",
+        "setup": "node dev/create-tables && node dev/seed-tables",
+        "setup-refresh": "node dev/drop-tables && npm run setup"
     },
     "repository": {
         "type": "git",
@@ -24,6 +26,7 @@
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "express-promise-router": "^3.0.3",
+        "express-validator": "^6.5.0",
         "nodemailer": "^6.4.6",
         "nodemailer-mailgun-transport": "^2.0.0",
         "pg": "^8.0.3"
