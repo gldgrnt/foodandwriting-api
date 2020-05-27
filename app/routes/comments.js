@@ -13,6 +13,8 @@ module.exports = router
 router.get('/', commentsController.getAll)
 router.get('/:postId', commentValidation, commentsController.getCommentsByPostId)
 
+// TODO: Move logic to commentsController
+
 
 /**
  * Create a comment
@@ -29,6 +31,7 @@ router.post('/', async (req, res) => {
         throw err
     }
 })
+
 
 /**
  * Approve a comment
