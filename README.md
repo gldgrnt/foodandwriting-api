@@ -1,3 +1,3 @@
-# foodandwriting-comments
+# foodandwriting-api
 
 Food and Writing api
