@@ -11,3 +11,7 @@ exports.addComment = [
 exports.approveComment = [
     param('id').not().isEmpty().toInt()
 ]
+
+exports.deleteComment = [
+    param('id').not().isEmpty().toInt()
+]
