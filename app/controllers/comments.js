@@ -40,10 +40,10 @@ class CommentsController {
             const { rows } = await comments.addComment(body)
 
             if (!rows.length) {
-                return res.status(500).json({ Message: "Comment could not be created" })
+                return res.status(500).json({ message: "Comment could not be created" })
             }
 
-            return res.status(201).json({ Message: "Comment created" })
+            return res.status(201).json({ message: "Comment created" })
         } catch (err) {
             throw err
         }
@@ -58,10 +58,10 @@ class CommentsController {
         const { rows } = await comments.approveComment(id)
 
         if (!rows.length || rows[0].id !== id || rows[0].approved !== true) {
-            return res.status(500).json({ Message: "Comment could not be approved" })
+            return res.status(500).json({ message: "Comment could not be approved" })
         }
 
-        return res.status(200).json({ Message: "Comment approved" })
+        return res.status(200).json({ message: "Comment approved" })
     }
 
     /**
@@ -73,14 +73,14 @@ class CommentsController {
         const { rows } = await comments.deleteComment(id)
 
         if (!rows.length) {
-            return res.status(500).json({ Message: "Comment could not be deleted" })
+            return res.status(500).json({ message: "Comment could not be deleted" })
         }
 
         if (parseInt(rows[0].count) !== 1) {
-            return res.status(409).json({ Message: "Comment has already been deleted / or doesn't exist" })
+            return res.status(409).json({ message: "Comment has already been deleted / or doesn't exist" })
         }
 
-        return res.status(200).json({ Message: "Comment deleted" })
+        return res.status(200).json({ message: "Comment deleted" })
     }
 }
 
