@@ -8,6 +8,7 @@ class CommentsController {
         try {
             const comments = new CommentsModel()
             const { rows } = await comments.selectAll()
+
             return res.status(200).json(rows)
         } catch (err) {
             throw err
@@ -22,6 +23,7 @@ class CommentsController {
             const comments = new CommentsModel()
             const postId = req.params.postId
             const { rows } = await comments.selectByPostId(postId)
+
             return res.status(200).json(rows)
         } catch (err) {
             throw err
@@ -37,7 +39,10 @@ class CommentsController {
             const comments = new CommentsModel()
             const { rows } = await comments.addComment(body)
 
-            if (!rows.length) return res.status(500).json({ Message: "Comment could not be created" })
+            if (!rows.length) {
+                return res.status(500).json({ Message: "Comment could not be created" })
+            }
+
             return res.status(201).json({ Message: "Comment created" })
         } catch (err) {
             throw err
@@ -55,7 +60,27 @@ class CommentsController {
         if (!rows.length || rows[0].id !== id || rows[0].approved !== true) {
             return res.status(500).json({ Message: "Comment could not be approved" })
         }
-        return res.status(201).json({ Message: "Comment created" })
+
+        return res.status(200).json({ Message: "Comment approved" })
+    }
+
+    /**
+     * Delete comment
+     */
+    async deleteComment(req, res) {
+        const { id } = req.params
+        const comments = new CommentsModel()
+        const { rows } = await comments.deleteComment(id)
+
+        if (!rows.length) {
+            return res.status(500).json({ Message: "Comment could not be deleted" })
+        }
+
+        if (parseInt(rows[0].count) !== 1) {
+            return res.status(409).json({ Message: "Comment has already been deleted / or doesn't exist" })
+        }
+
+        return res.status(200).json({ Message: "Comment deleted" })
     }
 }
 

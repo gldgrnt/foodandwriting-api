@@ -57,6 +57,19 @@ class CommentsModel {
         const params = [id]
         return this.db.query(queryString, params)
     }
+
+    /**
+     * Delete comment
+     */
+    async deleteComment(id) {
+        const queryString = `
+            WITH a AS (DELETE FROM ${this.table} WHERE id = $1 RETURNING 1)
+            SELECT count(*) FROM a;
+        `
+
+        const params = [id]
+        return this.db.query(queryString, params)
+    }
 }
 
 module.exports = CommentsModel
