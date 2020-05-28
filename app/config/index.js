@@ -9,18 +9,17 @@ if (env.error) {
 }
 
 module.exports = {
-    // DB
     db: {
         url: process.env.DATABASE_URL
     },
-
-    // Server
     server: {
         port: process.env.PORT,
         isProduction: process.env.NODE_ENV === 'production'
     },
-
-    // Email
+    okta: {
+        clientId: process.env.OKTA_CLIENT_ID,
+        domain: process.env.OKTA_DOMAIN
+    },
     mail: {
         apiKey: process.env.MAILGUN_API_KEY,
         domain: process.env.MAILGUN_DOMAIN
