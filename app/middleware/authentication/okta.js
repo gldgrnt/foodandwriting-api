@@ -1,10 +1,10 @@
-const appConfig = require('../../config')
+const { okta } = require('../../config')
 const OktaJwtVerifier = require('@okta/jwt-verifier')
 
 // Instantiate objects
 const jwtVerifier = new OktaJwtVerifier({
-    issuer: `${appConfig.okta.domain}/oauth2/default`,
-    clientId: appConfig.okta.clientId
+    issuer: `https://${okta.domain}/oauth2/default`,
+    clientId: okta.clientId
 })
 
 

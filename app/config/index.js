@@ -18,7 +18,8 @@ module.exports = {
     },
     okta: {
         clientId: process.env.OKTA_CLIENT_ID,
-        domain: process.env.OKTA_DOMAIN
+        domain: process.env.OKTA_DOMAIN,
+        clientSecret: process.env.OKTA_CLIENT_SECRET
     },
     mail: {
         apiKey: process.env.MAILGUN_API_KEY,
