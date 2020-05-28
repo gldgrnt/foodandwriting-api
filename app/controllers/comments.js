@@ -36,7 +36,7 @@ class CommentsController {
             const { body } = req
             const comments = new CommentsModel()
             const { rows } = await comments.addComment(body)
-            if (!rows) return res.status(500).json({ Message: "Comment could not be created" })
+            if (!rows.length) return res.status(500).json({ Message: "Comment could not be created" })
             return res.status(201).json({ Message: "Comment created" })
         } catch (err) {
             throw err
