@@ -1,7 +1,7 @@
 /**
  * Helper to seed dev db tables
  */
-const db = require('../app/db')
+const db = require('../db')
 const isProduction = process.env.NODE_ENV === 'production'
 
 /**

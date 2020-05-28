@@ -7,8 +7,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node app/app.js",
         "dev": "nodemon app/app.js",
-        "setup": "node dev/create-tables && node dev/seed-tables",
-        "setup-refresh": "node dev/drop-tables && npm run setup"
+        "setup": "node app/scripts/create-tables && node app/scripts/seed-tables",
+        "setup-refresh": "node app/scripts/drop-tables && npm run setup"
     },
     "repository": {
         "type": "git",
