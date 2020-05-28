@@ -1,22 +1,22 @@
-// Validation helper functions
 const { validationResult } = require('express-validator')
 
 /**
- * Check errors from validation middleware
- * @param {Object} req Http request object
- * @returns {{hasErrors: boolean, errors: object}}
+ * Validation helper function to use on multiple routes
+ * @description Runs each validator imperatively
+ * @param {Array} validations Single or Array of route validations
+ * @returns {Promise}
  */
-const checkErrors = (req) => {
-    const result = validationResult(req)
-    const errors = result.errors.map(err => err.msg) || []
+const validate = validations => {
+    return async (req, res, next) => {
+        await Promise.all(validations.map(validation => validation.run(req)))
 
-    return {
-        hasErrors: !result.isEmpty(),
-        errors: errors
+        const errors = validationResult(req)
+        if (errors.isEmpty()) {
+            return next()
+        }
+
+        res.status(400).json({ errors: errors.array() })
     }
 }
 
-module.exports = {
-    checkErrors
-}
-
+exports.validate = validate
