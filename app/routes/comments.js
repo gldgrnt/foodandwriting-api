@@ -2,7 +2,9 @@ const Router = require('express-promise-router')
 const db = require('../db')
 const { CommentsController } = require('../controllers')
 const { commentValidation } = require('../validation')
+const { validate } = require('../helpers').validation
 
+// Instatiate objects
 const commentsController = new CommentsController()
 const router = new Router() // Instantiate express router with promise functionality
 module.exports = router
@@ -11,26 +13,8 @@ module.exports = router
  * Define routes
  */
 router.get('/', commentsController.getAll)
-router.get('/:postId', commentValidation, commentsController.getCommentsByPostId)
-
-// TODO: Move logic to commentsController
-
-
-/**
- * Create a comment
- */
-router.post('/', async (req, res) => {
-    const { displayName, postId, postSlug, text } = req.body
-    const { parentCommentId } = parseInt(req.body.parentCommentId) || 0
-
-    try {
-        await db.query('INSERT INTO comments (display_name, post_id, post_slug, parent_comment_id, text) VALUES ($1, $2, $3, $4, $5)',
-            [displayName, postId, postSlug, parentCommentId, text])
-        res.status(201).json({ status: 'success', message: 'Comment succesfully added.' })
-    } catch (err) {
-        throw err
-    }
-})
+router.get('/:postId', commentsController.getCommentsByPostId)
+router.post('/add', validate(commentValidation.addComment), commentsController.addComment)
 
 
 /**

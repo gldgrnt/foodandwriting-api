@@ -1,10 +1,9 @@
-const { checkSchema } = require('express-validator')
+const { param, body } = require('express-validator')
 
-module.exports = checkSchema({
-    postId: {
-        in: ['params'],
-        errorMessage: 'Post ID is wrong'
-    }
-
-    // TODO: Add schema validation
-})
+exports.addComment = [
+    body('postId').not().isEmpty().isString().trim(),
+    body('displayName').not().isEmpty().isString().escape().trim(),
+    body('postSlug').not().isEmpty().isSlug().trim(),
+    body('parentCommentId').toInt(),
+    body('text').not().isEmpty().escape().trim()
+]
