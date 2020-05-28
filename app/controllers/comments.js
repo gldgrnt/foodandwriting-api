@@ -1,5 +1,4 @@
 const { CommentsModel } = require('../models')
-const { validation } = require('../helpers')
 
 class CommentsController {
     /**
@@ -19,9 +18,6 @@ class CommentsController {
      * Get comment by page
      */
     async getCommentsByPostId(req, res) {
-        const { hasErrors, errors } = validation.checkErrors(req)
-        if (hasErrors) return res.status(400).json({ errors })
-
         try {
             const comments = new CommentsModel()
             const postId = req.params.postId
@@ -35,7 +31,17 @@ class CommentsController {
     /**
      * Add a new comment
      */
-
+    async addComment(req, res) {
+        try {
+            const { body } = req
+            const comments = new CommentsModel()
+            const { rows } = await comments.addComment(body)
+            if (!rows) return res.status(500).json({ Message: "Comment could not be created" })
+            return res.status(201).json({ Message: "Comment created" })
+        } catch (err) {
+            throw err
+        }
+    }
 }
 
 module.exports = CommentsController
