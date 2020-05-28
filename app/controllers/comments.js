@@ -36,11 +36,26 @@ class CommentsController {
             const { body } = req
             const comments = new CommentsModel()
             const { rows } = await comments.addComment(body)
+
             if (!rows.length) return res.status(500).json({ Message: "Comment could not be created" })
             return res.status(201).json({ Message: "Comment created" })
         } catch (err) {
             throw err
         }
+    }
+
+    /**
+     * Approve a comment
+     */
+    async approveComment(req, res) {
+        const { id } = req.params
+        const comments = new CommentsModel()
+        const { rows } = await comments.approveComment(id)
+
+        if (!rows.length || rows[0].id !== id || rows[0].approved !== true) {
+            return res.status(500).json({ Message: "Comment could not be approved" })
+        }
+        return res.status(201).json({ Message: "Comment created" })
     }
 }
 

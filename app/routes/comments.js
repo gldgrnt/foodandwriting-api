@@ -9,27 +9,11 @@ const commentsController = new CommentsController()
 const router = new Router() // Instantiate express router with promise functionality
 module.exports = router
 
-/**
- * Define routes
- */
+// Define routes
 router.get('/', commentsController.getAll)
 router.get('/:postId', commentsController.getCommentsByPostId)
 router.post('/add', validate(commentValidation.addComment), commentsController.addComment)
-
-
-/**
- * Approve a comment
- */
-router.put('/approve/:id', async (req, res) => {
-    const id = parseInt(req.params.id)
-
-    try {
-        await db.query('UPDATE comments SET approved = TRUE WHERE id = $1', [id])
-        res.status(200).json({ status: 'success', message: `Approved comment with ID: ${id}` })
-    } catch (err) {
-        throw err
-    }
-})
+router.put('/approve/:id', validate(commentValidation.approveComment), commentsController.approveComment)
 
 
 /**

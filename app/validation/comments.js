@@ -7,3 +7,7 @@ exports.addComment = [
     body('parentCommentId').toInt(),
     body('text').not().isEmpty().escape().trim()
 ]
+
+exports.approveComment = [
+    param('id').not().isEmpty().toInt()
+]
