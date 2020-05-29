@@ -16,7 +16,7 @@ exports.verifyToken = async (req, res, next) => {
 
     try {
         if (!bearerHeader) {
-            res.status(403).json({ message: 'Bearer token missing' })
+            return res.status(403).json({ message: 'Missing token' })
         }
 
         const bearer = bearerHeader.split(' ')
