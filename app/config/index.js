@@ -22,7 +22,11 @@ module.exports = {
         clientSecret: process.env.OKTA_CLIENT_SECRET
     },
     mail: {
-        apiKey: process.env.MAILGUN_API_KEY,
-        domain: process.env.MAILGUN_DOMAIN
+        smtp: {
+            host: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,
+        },
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
     }
 }

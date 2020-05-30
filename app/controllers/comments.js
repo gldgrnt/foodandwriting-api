@@ -1,4 +1,5 @@
 const { CommentsModel } = require('../models')
+const { sendCommentEmailTest } = require('../email').comments
 
 class CommentsController {
     /**
@@ -42,6 +43,9 @@ class CommentsController {
             if (!rows.length) {
                 return res.status(500).json({ message: "Comment could not be created" })
             }
+
+            // TODO: get parameters from the comments.addComment() function
+            await sendCommentEmailTest('gilad@wadada-design.com', 'Test person')
 
             return res.status(201).json({ message: "Comment created" })
         } catch (err) {
