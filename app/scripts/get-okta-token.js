@@ -22,10 +22,10 @@ const axiosConfig = {
 
     try {
         const { data } = await axios(axiosConfig)
-        console.log('Copying token to clipboard')
+        console.log('Copying token to clipboard', data)
 
         clipboardy.writeSync(data.access_token)
-        console.log('Token copied to clipboad!')
+        console.log('Token copied to clipboard!')
     } catch (err) {
         console.log(err)
     }
