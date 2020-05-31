@@ -34,13 +34,13 @@ class CommentsModel {
     /**
      * Add comment
      */
-    async addComment({ displayName, postId, postSlug, parentCommentId = 0, text }) {
+    async addComment({ displayName, email, postId, postSlug, parentCommentId = 0, text }) {
         const queryString = `
-            INSERT INTO ${this.table} (display_name, post_id, post_slug, parent_comment_id, text) 
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING id;
+            INSERT INTO ${this.table} (display_name, email, post_id, post_slug, parent_comment_id, text) 
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING id, email, display_name;
         `
-        const params = [displayName, postId, postSlug, parentCommentId, text]
+        const params = [displayName, email, postId, postSlug, parentCommentId, text]
         return this.db.query(queryString, params)
     }
 

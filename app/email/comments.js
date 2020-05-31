@@ -1,20 +1,22 @@
 const { sendEmail } = require('../helpers').email
 
-// Set from email address
-const from = 'info@foodandwriting.co.uk'
-
 /**
- * Send test comment email address
- * @param {string} to Recipient email address
- * @param {string} name Recipient name
+ * Send verification email to user
+ * @param {string} email Recipient email address
+ * @param {string} id Comment id
+ * @param {string} displayName Display name
  * @returns {Promise} Call sendEmail 
  */
-exports.sendCommentEmailTest = async (to, name) => {
-    return sendEmail({
-        to,
-        from,
-        subject: 'Test email',
-        text: `Hello there ${name}`,
-        html: `<strong>Hello there ${name}</strong>`,
-    })
+exports.sendVerificationEmail = async (email, id, displayName) => {
+    const template = 'verifyComment'
+    const message = {
+        to: email,
+        from: '"Food and writing" <info@foodandwriting.co.uk>'
+    }
+    const locals = {
+        id,
+        displayName
+    }
+
+    return sendEmail({ template, message, locals })
 }

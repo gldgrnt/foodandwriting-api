@@ -12,12 +12,9 @@ const seedComments = () => {
 
     const queryString = `
         INSERT INTO comments 
-            (display_name, post_id, post_slug, parent_comment_id, text)
+            (display_name, email, post_id, post_slug, parent_comment_id, text)
         VALUES
-            ('First commenter', '1', '/post-1', 0, 'This is the first comment'),
-            ('First replier', 1, '/post-1', 1, 'This is a reply to the first comment'),
-            ('Second commenter', '1', '/post-1', 0, 'This is the second comment'),
-            ('Another commenter', 2, '/post-2', 0, 'This is a comment on another post');
+            ('First commenter', 'commenter@email.com', '1', '/post-1', 0, 'This is the first comment');
     `
 
     console.log('Seeding `comments` table')

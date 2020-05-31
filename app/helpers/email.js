@@ -1,46 +1,35 @@
+const Email = require('email-templates')
 const nodemailer = require('nodemailer')
-const { mail, isProduction } = require('../config')
+const config = require('../config')
 
-const getTransporter = async () => {
-    let account = mail
-    let secure = true
+// Create transport
+const transport = nodemailer.createTransport({
+    host: config.mail.smtp.host,
+    port: config.mail.smtp.port,
+    secure: true, // true for 465, false for other ports
+    auth: {
+        user: config.mail.user,
+        pass: config.mail.pass,
+    },
+})
 
-    // Override variables for dev env
-    if (!isProduction) {
-        account = await nodemailer.createTestAccount()
-        secure = false
-    }
-
-    // Create transporter object
-    return nodemailer.createTransport({
-        host: account.smtp.host,
-        port: account.smtp.port,
-        secure, // true for 465, false for other ports
-        auth: {
-            user: account.user,
-            pass: account.pass,
-        },
-    })
-}
+// Create email instance 
+const email = new Email({
+    transport,
+    // Uncomment below to send in development
+    // send: true
+})
 
 /**
  * Helper to semd email - info logged in dev environment
- * @param {Object} config Email configuration
- * @param {String} config.from Sender
- * @param {String} config.to Recipient
- * @param {String} config.subject Email subject
- * @param {String} config.text Text version of email content
- * @param {String} config.html HTML version of email content
+ * @param {Object} config Email config
+ * @param {String} config.template Email template
+ * @param {Object} config.message Object containing recipient and sender email
+ * @param {String} config.message.to Recipient
+ * @param {String} config.message.from Sender
+ * @param {Objects} config.locals Local vars for pug template
  */
-exports.sendEmail = async config => {
-    const transporter = await getTransporter()
-    const info = await transporter.sendMail(config)
-
-    if (isProduction) {
-        return
-    }
-
-    // Log info about the message and a link to view the ethereal mail
-    console.log("Message sent: %s", info.messageId)
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info))
+exports.sendEmail = async (config) => {
+    await email.send(config)
+    console.log('Email sent')
 }

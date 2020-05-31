@@ -16,10 +16,12 @@ const createCommentsTable = () => {
             ID SERIAL PRIMARY KEY,
             date TIMESTAMPTZ DEFAULT now(),
             display_name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
             post_id VARCHAR(255) NOT NULL,
             post_slug VARCHAR(255) NOT NULL,
             parent_comment_id INTEGER DEFAULT 0,
             text VARCHAR(255) NOT NULL,
+            verified BOOLEAN DEFAULT FALSE,
             approved BOOLEAN DEFAULT FALSE
         );
     `
