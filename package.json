@@ -8,7 +8,8 @@
         "start": "node app/app.js",
         "dev": "nodemon app/app.js",
         "setup": "node app/scripts/create-tables && node app/scripts/seed-tables",
-        "setup-refresh": "node app/scripts/drop-tables && npm run setup",
+        "setup:refresh": "node app/scripts/drop-tables && npm run setup",
+        "setup:drop": "node app/scripts/drop-tables",
         "get-okta-token": "node app/scripts/get-okta-token"
     },
     "repository": {
@@ -26,6 +27,7 @@
         "@okta/jwt-verifier": "0.0.14",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
+        "email-templates": "^7.0.5",
         "express": "^4.17.1",
         "express-promise-router": "^3.0.3",
         "express-validator": "^6.5.0",
