@@ -2,6 +2,7 @@
  * Helper to seed dev db tables
  */
 const db = require('../db')
+const { nanoid } = require('nanoid')
 const isProduction = process.env.NODE_ENV === 'production'
 
 /**
@@ -12,9 +13,9 @@ const seedComments = () => {
 
     const queryString = `
         INSERT INTO comments 
-            (display_name, email, post_id, post_slug, parent_comment_id, text)
+            (id, display_name, email, post_id, post_slug, text)
         VALUES
-            ('First commenter', 'commenter@email.com', '1', '/post-1', 0, 'This is the first comment');
+            ('${nanoid()}', 'First commenter', 'commenter@email.com', '1', '/post-1', 'This is the first comment');
     `
 
     console.log('Seeding `comments` table')

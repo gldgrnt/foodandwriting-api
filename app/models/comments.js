@@ -1,9 +1,11 @@
 const db = require('../db')
+const nanoid = require('nanoid')
 
 class CommentsModel {
     constructor() {
         this.db = db
         this.table = 'comments'
+        this.id = nanoid()
     }
 
     /**
@@ -34,20 +36,20 @@ class CommentsModel {
     /**
      * Add comment
      */
-    async addComment({ displayName, email, postId, postSlug, parentCommentId = 0, text }) {
+    async add({ displayName, email, postId, postSlug, text }) {
         const queryString = `
-            INSERT INTO ${this.table} (display_name, email, post_id, post_slug, parent_comment_id, text) 
+            INSERT INTO ${this.table} (id, display_name, email, post_id, post_slug, text) 
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING id, email, display_name;
         `
-        const params = [displayName, email, postId, postSlug, parentCommentId, text]
+        const params = [this.id, displayName, email, postId, postSlug, text]
         return this.db.query(queryString, params)
     }
 
     /**
      * Approve comment
      */
-    async approveComment(id) {
+    async approve(id) {
         const queryString = `
             UPDATE ${this.table} 
             SET approved = TRUE 
@@ -61,7 +63,7 @@ class CommentsModel {
     /**
      * Delete comment
      */
-    async deleteComment(id) {
+    async delete(id) {
         const queryString = `
             WITH a AS (DELETE FROM ${this.table} WHERE id = $1 RETURNING 1)
             SELECT count(*) FROM a;

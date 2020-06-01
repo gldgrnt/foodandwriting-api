@@ -6,25 +6,31 @@ const db = require('../db')
 const isProduction = process.env.NODE_ENV === 'production'
 
 /**
- * Drop comments table
+ * Drop table
  */
-const dropCommentsTable = () => {
+const dropTable = (tableName) => {
     if (isProduction) return
 
-    const queryString = `DROP TABLE IF EXISTS comments`
+    const queryString = `DROP TABLE IF EXISTS ${tableName}`
 
-    console.log('Dropping `comments` table')
+    console.log(`Dropping '${tableName}' table`)
     return db.query(queryString)
 
 }
+
+/**
+ * Tables to drop
+ */
+const tabelsToDrop = ['replies', 'comments'];
 
 /**
  * Drop all tables
  */
 (async () => {
     try {
-        await dropCommentsTable()
-
+        tabelsToDrop.forEach(async table => {
+            await dropTable(table)
+        })
     } catch (err) {
         throw err
     }
