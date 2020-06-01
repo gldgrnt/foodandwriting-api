@@ -10,17 +10,30 @@ class RepliesModel {
     }
 
     /**
-     * Add comment
+     * Select all
      */
-    async add({ text, commentId }) {
+    async selectAll() {
         const queryString = `
-            INSERT INTO ${this.table} (text, comment_id) 
-            VALUES ($1, $2)
-            RETURNING id;
+            SELECT *
+            FROM ${this.table} 
+            ORDER BY date DESC;
         `
-        const params = [text, commentId]
-        return this.db.query(queryString, params)
+        return this.db.query(queryString)
+    }
+
+    /**
+     * Select by comment id
+     * @param commentIds String form of arary of comment ids
+     */
+    async selectByCommentId(commentIds) {
+        const queryString = `
+            SELECT *
+            FROM ${this.table} 
+            WHERE comment_id IN (${commentIds})
+            ORDER BY date DESC;
+        `
+        return this.db.query(queryString)
     }
 }
 
-module.exports = CommentsModel
+module.exports = RepliesModel

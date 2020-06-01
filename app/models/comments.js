@@ -1,5 +1,5 @@
 const db = require('../db')
-const nanoid = require('nanoid')
+const { nanoid } = require('nanoid')
 
 class CommentsModel {
     constructor() {
@@ -9,11 +9,12 @@ class CommentsModel {
     }
 
     /**
-     * Select all comments
+     * Select all
      */
     async selectAll() {
         const queryString = `
-            SELECT * FROM ${this.table} 
+            SELECT id, date, display_name, post_id, post_slug, text, verified, approved
+            FROM ${this.table} 
             ORDER BY date DESC;
         `
         return this.db.query(queryString)
@@ -24,7 +25,8 @@ class CommentsModel {
      */
     async selectByPostId(postId) {
         const queryString = `
-            SELECT * FROM ${this.table} 
+            SELECT id, date, display_name, post_id, post_slug, text
+            FROM ${this.table} 
             WHERE post_id = $1 
             ORDER BY date DESC;
         `
