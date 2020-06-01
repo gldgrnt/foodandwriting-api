@@ -1,5 +1,6 @@
-const { CommentsModel } = require('../models')
+const { CommentsModel, RepliesModel } = require('../models')
 const { sendVerificationEmail } = require('../email').comments
+const { appendReplies } = require('../services')
 
 class CommentsController {
     /**
@@ -8,9 +9,13 @@ class CommentsController {
     async getAll(req, res) {
         try {
             const comments = new CommentsModel()
-            const { rows } = await comments.selectAll()
-
-            return res.status(200).json(rows)
+            const replies = new RepliesModel()
+            // Get all rows
+            const allComments = await comments.selectAll()
+            const allReplies = await replies.selectAll()
+            // Append replies
+            const data = appendReplies(allComments, allReplies)
+            return res.status(200).json(data)
         } catch (err) {
             throw err
         }
@@ -22,10 +27,16 @@ class CommentsController {
     async getCommentsByPostId(req, res) {
         try {
             const comments = new CommentsModel()
+            const replies = new RepliesModel()
+            // Get comments
             const postId = req.params.postId
-            const { rows } = await comments.selectByPostId(postId)
-
-            return res.status(200).json(rows)
+            const selectedComments = await comments.selectByPostId(postId)
+            // Get associated replies
+            const selectedCommentsString = selectedComments.rows.map(comment => `'${comment.id}'`).toString()
+            const selectedReplies = await replies.selectByCommentId(selectedCommentsString)
+            // Append replies
+            const data = appendReplies(selectedComments, selectedReplies)
+            return res.status(200).json(data)
         } catch (err) {
             throw err
         }
@@ -74,7 +85,7 @@ class CommentsController {
     async deleteComment(req, res) {
         const { id } = req.params
         const comments = new CommentsModel()
-        const { rows } = await comments.deleteComment(id)
+        const { rows } = await comments.delete(id)
 
         if (!rows.length) {
             return res.status(500).json({ message: "Comment could not be deleted" })
