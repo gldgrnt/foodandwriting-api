@@ -10,6 +10,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Set up cors
 app.use(cors())
 
+// Add public directory
+app.use('/static', express.static('static'))
+
 // Routes
 app.get('/', (req, res) => { res.json({ info: "Food and Writing API" }) })
 mountRoutes(app)

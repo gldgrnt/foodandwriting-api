@@ -1,0 +1,51 @@
+/* Globals */
+* {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #f6f6f6;
+}
+
+/* Main table styles */
+.main-table {
+    padding: 60px 0;
+    width: 100%;
+}
+
+.main-table tbody tr {
+    padding: 0;
+    vertical-align: top;
+}
+
+.main-table tbody tr td {
+    border-collapse: collapse !important;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+/* Content table */
+.content-table {
+    background: white;
+    border: 1px solid #eee;
+    padding: 25px 40px;
+    width: 600px;
+    margin: 0 auto;
+}
+
+.content-table p:first-child {
+    margin-top: 0;
+}
+
+/* CTA */
+.cta-button {
+    font-size: 10px;
+    color: #111;
+    background-color: #ffd91f;
+    text-transform: uppercase;
+    padding: 7px 10px;
+}

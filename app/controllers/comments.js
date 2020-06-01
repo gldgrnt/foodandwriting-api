@@ -49,15 +49,13 @@ class CommentsController {
         try {
             const { body } = req
             const comments = new CommentsModel()
-            const { rows } = await comments.addComment(body)
-
+            const { rows } = await comments.add(body)
+            // Check if comment was added
             if (!rows.length) {
                 return res.status(500).json({ message: "Comment could not be created" })
             }
-
-            const { email, id, display_name } = rows[0]
-            await sendVerificationEmail(email, id, display_name)
-
+            // Send verification email
+            await sendVerificationEmail(rows[0])
             return res.status(201).json({ message: "Comment created" })
         } catch (err) {
             throw err

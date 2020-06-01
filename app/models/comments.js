@@ -42,7 +42,7 @@ class CommentsModel {
         const queryString = `
             INSERT INTO ${this.table} (id, display_name, email, post_id, post_slug, text) 
             VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING id, email, display_name;
+            RETURNING id, email;
         `
         const params = [this.id, displayName, email, postId, postSlug, text]
         return this.db.query(queryString, params)

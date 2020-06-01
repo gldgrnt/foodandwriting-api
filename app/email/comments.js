@@ -4,10 +4,9 @@ const { sendEmail } = require('../helpers').email
  * Send verification email to user
  * @param {string} email Recipient email address
  * @param {string} id Comment id
- * @param {string} displayName Display name
  * @returns {Promise} Call sendEmail 
  */
-exports.sendVerificationEmail = async (email, id, displayName) => {
+exports.sendVerificationEmail = async ({ email, id }) => {
     const template = 'verifyComment'
     const message = {
         to: email,
@@ -15,7 +14,6 @@ exports.sendVerificationEmail = async (email, id, displayName) => {
     }
     const locals = {
         id,
-        displayName
     }
 
     return sendEmail({ template, message, locals })

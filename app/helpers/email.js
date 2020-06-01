@@ -1,6 +1,7 @@
 const Email = require('email-templates')
 const nodemailer = require('nodemailer')
 const config = require('../config')
+const path = require('path')
 
 // Create transport
 const transport = nodemailer.createTransport({
@@ -15,6 +16,16 @@ const transport = nodemailer.createTransport({
 
 // Create email instance 
 const email = new Email({
+    views: {
+        root: path.resolve('app/views/emails/templates')
+    },
+    juice: true,
+    juiceResources: {
+        preserveImportant: true,
+        webResources: {
+            relativeTo: path.resolve('app/views/emails/assets'),
+        }
+    },
     transport,
     // Uncomment below to send in development
     // send: true
