@@ -3,37 +3,29 @@
  * for testing puposes
  */
 const db = require('../db')
-const isProduction = process.env.NODE_ENV === 'production'
+const { isProduction } = require('../config')
 
 /**
- * Drop table
+ * Drop tables query
  */
-const dropTable = (tableName) => {
-    if (isProduction) return
+const dropTablesQuery = `
+    DROP TABLE IF EXISTS comments CASCADE;
+    DROP TABLE IF EXISTS replies;
+`;
 
-    console.log(`Dropping '${tableName}' table`)
-    return db.query(`DROP TABLE IF EXISTS ${tableName}`)
-
-}
-
-/**
- * Tables to drop
- */
-const tablesToDrop = ['replies', 'comments'];
 
 /**
  * Drop all tables
  */
-(() => {
-    tablesToDrop.forEach(async table => {
-        try {
-            await dropTable(table)
-        } catch (err) {
-            throw err
-        }
-    })
+(async () => {
+    try {
+        if (isProduction) return
 
-    // Exit
-    console.log('Tables dropped')
-    process.exit()
+        console.log('Dropping tables')
+        await db.query(dropTablesQuery)
+        console.log('Tables dropped')
+        process.exit()
+    } catch (err) {
+        throw err
+    }
 })()

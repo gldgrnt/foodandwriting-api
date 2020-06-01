@@ -7,8 +7,9 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node app/app.js",
         "dev": "nodemon app/app.js",
-        "setup": "node app/scripts/create-tables && node app/scripts/seed-tables",
-        "setup:refresh": "node app/scripts/drop-tables && npm run setup",
+        "setup": "npm run setup:drop && npm run setup:create && npm run setup:seed",
+        "setup:create": "node app/scripts/create-tables",
+        "setup:seed": "node app/scripts/seed-tables",
         "setup:drop": "node app/scripts/drop-tables",
         "get-okta-token": "node app/scripts/get-okta-token"
     },
