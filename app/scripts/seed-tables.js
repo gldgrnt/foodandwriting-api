@@ -3,32 +3,41 @@
  */
 const db = require('../db')
 const { nanoid } = require('nanoid')
-const isProduction = process.env.NODE_ENV === 'production'
+const { isProduction } = require('../config')
 
 /**
- * Seed comments table
+ * Seed table 
  */
-const seedComments = () => {
+const seedTable = ({ name, queryString }) => {
     if (isProduction) return
 
-    const queryString = `
-        INSERT INTO comments 
-            (id, display_name, email, post_id, post_slug, text)
-        VALUES
-            ('${nanoid()}', 'First commenter', 'commenter@email.com', '1', '/post-1', 'This is the first comment');
-    `
-
-    console.log('Seeding `comments` table')
+    console.log(`Seeding '${name}' table`)
     return db.query(queryString)
 }
 
 /**
+ * Tables to seed
+ */
+const tablesToSeed = [
+    {
+        name: 'comments',
+        queryString: `
+            INSERT INTO comments 
+                (id, display_name, email, post_id, post_slug, text)
+            VALUES
+                ('${nanoid()}', 'First commenter', 'commenter@email.com', '1', '/post-1', 'This is the first comment');
+        `
+    }
+];
+
+/**
  * Seed all tables
  */
-(async () => {
+(() => {
     try {
-        await seedComments()
-
+        tablesToSeed.forEach(async table => {
+            await seedTable(table)
+        })
     } catch (err) {
         throw err
     }

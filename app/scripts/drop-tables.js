@@ -11,24 +11,22 @@ const isProduction = process.env.NODE_ENV === 'production'
 const dropTable = (tableName) => {
     if (isProduction) return
 
-    const queryString = `DROP TABLE IF EXISTS ${tableName}`
-
     console.log(`Dropping '${tableName}' table`)
-    return db.query(queryString)
+    return db.query(`DROP TABLE IF EXISTS ${tableName}`)
 
 }
 
 /**
  * Tables to drop
  */
-const tabelsToDrop = ['replies', 'comments'];
+const tablesToDrop = ['replies', 'comments'];
 
 /**
  * Drop all tables
  */
-(async () => {
+(() => {
     try {
-        tabelsToDrop.forEach(async table => {
+        tablesToDrop.forEach(async table => {
             await dropTable(table)
         })
     } catch (err) {
