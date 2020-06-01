@@ -25,7 +25,7 @@ class CommentsModel {
      */
     async selectByPostId(postId) {
         const queryString = `
-            SELECT id, date, display_name, post_id, post_slug, text
+            SELECT id, date, display_name, text
             FROM ${this.table} 
             WHERE post_id = $1 
             ORDER BY date DESC;
