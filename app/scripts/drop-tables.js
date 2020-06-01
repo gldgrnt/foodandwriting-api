@@ -25,13 +25,13 @@ const tablesToDrop = ['replies', 'comments'];
  * Drop all tables
  */
 (() => {
-    try {
-        tablesToDrop.forEach(async table => {
+    tablesToDrop.forEach(async table => {
+        try {
             await dropTable(table)
-        })
-    } catch (err) {
-        throw err
-    }
+        } catch (err) {
+            throw err
+        }
+    })
 
     // Exit
     console.log('Tables dropped')

@@ -34,13 +34,13 @@ const tablesToSeed = [
  * Seed all tables
  */
 (() => {
-    try {
-        tablesToSeed.forEach(async table => {
+    tablesToSeed.forEach(async table => {
+        try {
             await seedTable(table)
-        })
-    } catch (err) {
-        throw err
-    }
+        } catch (err) {
+            throw err
+        }
+    })
 
     // Exit
     console.log('Tables seeded')

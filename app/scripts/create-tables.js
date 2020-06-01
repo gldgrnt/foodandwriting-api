@@ -52,13 +52,13 @@ const tablesToCreate = [
  * Create all tables
  */
 (() => {
-    try {
-        tablesToCreate.forEach(async table => {
+    tablesToCreate.forEach(async table => {
+        try {
             await createTable(table)
-        })
-    } catch (err) {
-        throw err
-    }
+        } catch (err) {
+            throw err
+        }
+    })
 
     // Exit
     console.log('Tables created')
