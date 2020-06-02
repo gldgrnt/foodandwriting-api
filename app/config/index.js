@@ -12,6 +12,9 @@ module.exports = {
     db: {
         url: process.env.DATABASE_URL
     },
+    app: {
+        url: process.env.APP_URL,
+    },
     server: {
         port: process.env.PORT,
         isProduction: process.env.NODE_ENV === 'production'

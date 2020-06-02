@@ -33,14 +33,16 @@ const email = new Email({
 
 /**
  * Helper to semd email - info logged in dev environment
- * @param {Object} config Email config
- * @param {String} config.template Email template
- * @param {Object} config.message Object containing recipient and sender email
- * @param {String} config.message.to Recipient
- * @param {String} config.message.from Sender
- * @param {Objects} config.locals Local vars for pug template
+ * @param {Object} emailConfig Email config
+ * @param {String} emailConfig.template Email template
+ * @param {Object} emailConfig.message Object containing recipient and sender email
+ * @param {String} emailConfig.message.to Recipient
+ * @param {String} emailConfig.message.from Sender
+ * @param {Objects} emailConfig.locals Local vars for pug template
  */
-exports.sendEmail = async (config) => {
-    await email.send(config)
+exports.sendEmail = async (emailConfig) => {
+    // Add app url to local variables
+    emailConfig.locals.appUrl = config.app.url
+    await email.send(emailConfig)
     console.log('Email sent')
 }
