@@ -2,8 +2,9 @@ const { sendEmail } = require('../helpers').email
 
 /**
  * Send verification email to user
- * @param {string} email Recipient email address
- * @param {string} id Comment id
+ * @param {object} row Database row
+ * @param {string} row.email Recipient email address
+ * @param {string} row.id Comment id
  * @returns {Promise} Call sendEmail 
  */
 exports.sendVerificationEmail = async ({ email, id }) => {
