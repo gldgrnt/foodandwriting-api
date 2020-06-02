@@ -13,7 +13,7 @@ router.get('/', [okta.verifyToken], commentsController.getAll)
 router.get('/:postId', [okta.verifyToken], commentsController.getCommentsByPostId)
 router.post('/', [okta.verifyToken, commentValidation.addComment], commentsController.addComment)
 // router.get('/v/:id', [commentValidation.verifyComment], commentsController.verifyComment)
-// router.get('/a/:id', [okta.verifyToken, commentValidation.approveComment], commentsController.approveComment)
+// router.put('/a/:id', [okta.verifyToken, commentValidation.approveComment], commentsController.approveComment)
 router.delete('/:id', [okta.verifyToken, commentValidation.deleteComment], commentsController.deleteComment)
 
 module.exports = router
