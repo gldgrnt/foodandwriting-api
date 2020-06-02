@@ -31,6 +31,18 @@ const email = new Email({
     // send: true
 })
 
+// Add local variables
+const addLocalVariables = (locals) => {
+    const { urls } = config
+
+    return {
+        ...locals,
+        appUrl: urls.app,
+        siteUrl: urls.site,
+        studioUrl: urls.studio,
+    }
+}
+
 /**
  * Helper to semd email - info logged in dev environment
  * @param {Object} emailConfig Email config
@@ -41,8 +53,8 @@ const email = new Email({
  * @param {Objects} emailConfig.locals Local vars for pug template
  */
 exports.sendEmail = async (emailConfig) => {
-    // Add app url to local variables
-    emailConfig.locals.appUrl = config.app.url
+    // Add variables local variables
+    emailConfig.locals = addLocalVariables(emailConfig.locals)
     await email.send(emailConfig)
     console.log('Email sent')
 }
