@@ -12,8 +12,10 @@ module.exports = {
     db: {
         url: process.env.DATABASE_URL
     },
-    app: {
-        url: process.env.APP_URL,
+    urls: {
+        api: process.env.APP_URL,
+        site: process.env.SITE_URL,
+        studio: process.env.STUDIO_URL,
     },
     server: {
         port: process.env.PORT,
@@ -25,6 +27,7 @@ module.exports = {
         clientSecret: process.env.OKTA_CLIENT_SECRET
     },
     mail: {
+        admin: process.env.MAIL_ADMIN,
         smtp: {
             host: process.env.MAIL_HOST,
             port: process.env.MAIL_PORT,
