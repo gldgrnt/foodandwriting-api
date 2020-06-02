@@ -1,6 +1,7 @@
 const { CommentsModel, RepliesModel } = require('../models')
 const { sendVerificationEmail, sendAdminNotificationEmail } = require('../../services').emails
 const { appendReplies } = require('../../services').transformers
+const config = require('../../config')
 
 class CommentsController {
     /**
@@ -70,13 +71,13 @@ class CommentsController {
             const { id } = req.params
             const comments = new CommentsModel()
             const { rows } = await comments.verify(id)
-
+            // Check if comment was verified
             if (!rows.length || rows[0].id !== id || rows[0].verified !== true) {
                 return res.status(500).json({ message: "Comment could not be verified" })
             }
-            // TODO: RETURN A VIEW
-            await sendAdminNotificationEmail(rows[0])
-            return res.render('comment-verified')
+            // Send admin notification
+            // await sendAdminNotificationEmail(rows[0])
+            return res.render('comment-verified', { appUrl: config.urls.app })
         } catch (err) {
 
         }

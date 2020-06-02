@@ -1,5 +1,5 @@
-html
-    head
-    body
-        p You're comment has been verified
-        p You can close this tab
+extends ../includes/layout.pug
+
+block main
+    p Thanks for verifying your comment. You can now close this tab.
+    button.close-tab(onclick='window.close();') Close tab
