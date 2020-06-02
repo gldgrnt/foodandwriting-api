@@ -1,14 +1,14 @@
 extends ../../includes/layout.pug
 
-block content
-    table.content-table
-        tbody
-            tr
-                td
-                    img#logo(src='http://localhost:3000/static/faw.jpg' width='150px')
-                    p Hi,
-                    p 
-                        | Thanks for leaving a comment on 
-                        b food &amp; writing
-                        | . Please verify your comment via the link below
-                    a.cta-button Verify comment
+block mainContent
+    - var verificationUrl = appUrl+'/comments/v/'+id
+    p Thanks for leaving a comment on food &amp; writing, please verify it by clicking the button below.
+    a.cta-button(href=verificationUrl target='_blank') Verify comment
+    p Your comment will be visible on the site once it's been approved.
+
+block secondaryContent
+    - var verificationUrl = appUrl+'/comments/v/'+id
+    p Can't see the button? Just click here: 
+    p 
+        a(href=verificationUrl target='_blank') !{verificationUrl}
+    

@@ -6,6 +6,19 @@ body
         tbody
             tr
                 td
-                    block content
-        
+                            
+                    table.content-table
+                        tbody
+                            tr
+                                td
+                                    img.logo(src=appUrl+'/static/faw.png' width='180px')
+                            tr
+                                td
+                                    block mainContent
+                                    p.signature Jordan
+                            tr
+                                td.secondary-content
+                                    block secondaryContent
+                            
+                        
 </html> 
