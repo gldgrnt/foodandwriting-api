@@ -8,14 +8,12 @@ const { okta } = require('../middleware').authentication
 const commentsController = new CommentsController()
 const router = new Router() // Instantiate express router with promise functionality
 
-// Add a router level authentication
-router.use(okta.verifyToken)
-
 // Define routes
-router.get('/', commentsController.getAll)
-router.get('/:postId', commentsController.getCommentsByPostId)
-router.post('/add', commentValidation.addComment, commentsController.addComment)
-router.put('/approve/:id', commentValidation.approveComment, commentsController.approveComment)
-router.delete('/delete/:id', commentValidation.deleteComment, commentsController.deleteComment)
+router.get('/', [okta.verifyToken], commentsController.getAll)
+router.get('/:postId', [okta.verifyToken], commentsController.getCommentsByPostId)
+router.post('/', [okta.verifyToken, commentValidation.addComment], commentsController.addComment)
+// router.get('/v/:id', [commentValidation.verifyComment], commentsController.verifyComment)
+// router.get('/a/:id', [okta.verifyToken, commentValidation.approveComment], commentsController.approveComment)
+router.delete('/:id', [okta.verifyToken, commentValidation.deleteComment], commentsController.deleteComment)
 
 module.exports = router
