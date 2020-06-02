@@ -5,13 +5,13 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node app/app.js",
+        "start": "node scripts/create-tables && node app/app.js",
         "dev": "nodemon app/app.js",
         "setup": "npm run setup:drop && npm run setup:create && npm run setup:seed",
-        "setup:create": "node app/scripts/create-tables",
-        "setup:seed": "node app/scripts/seed-tables",
-        "setup:drop": "node app/scripts/drop-tables",
-        "get-okta-token": "node app/scripts/get-okta-token"
+        "setup:create": "node scripts/create-tables",
+        "setup:seed": "node scripts/seed-tables",
+        "setup:drop": "node scripts/drop-tables",
+        "get-okta-token": "node scripts/get-okta-token"
     },
     "repository": {
         "type": "git",

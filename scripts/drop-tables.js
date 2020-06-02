@@ -1,7 +1,3 @@
-/**
- * Helper script to create and drop db tables
- * for testing puposes
- */
 const db = require('../db')
 const { isProduction } = require('../config')
 

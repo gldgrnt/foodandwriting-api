@@ -1,5 +1,4 @@
 const Router = require('express-promise-router')
-const db = require('../db')
 const { CommentsController } = require('../controllers')
 const { commentValidation } = require('../middleware').validation
 const { okta } = require('../middleware').authentication
@@ -11,9 +10,9 @@ const router = new Router() // Instantiate express router with promise functiona
 // Define routes
 router.get('/', [okta.verifyToken], commentsController.getAll)
 router.get('/:postId', [okta.verifyToken], commentsController.getCommentsByPostId)
-router.post('/', [okta.verifyToken, commentValidation.addComment], commentsController.addComment)
-router.get('/v/:id', [commentValidation.verifyComment], commentsController.verifyComment)
-// router.put('/a/:id', [okta.verifyToken, commentValidation.approveComment], commentsController.approveComment)
-router.delete('/:id', [okta.verifyToken, commentValidation.deleteComment], commentsController.deleteComment)
+router.post('/', [okta.verifyToken, commentValidation.validateComment], commentsController.addComment)
+router.get('/v/:id', [commentValidation.validateCommentId], commentsController.verifyComment)
+// router.put('/a/:id', [okta.verifyToken, commentValidation.validateCommentId], commentsController.approveComment)
+router.delete('/:id', [okta.verifyToken, commentValidation.validateCommentId], commentsController.deleteComment)
 
 module.exports = router

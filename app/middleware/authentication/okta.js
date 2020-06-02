@@ -1,5 +1,5 @@
-const { okta } = require('../../config')
 const OktaJwtVerifier = require('@okta/jwt-verifier')
+const { okta } = require('../../../config')
 
 // Instantiate objects
 const jwtVerifier = new OktaJwtVerifier({

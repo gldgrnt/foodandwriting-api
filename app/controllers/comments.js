@@ -1,6 +1,6 @@
 const { CommentsModel, RepliesModel } = require('../models')
-const { sendVerificationEmail, sendAdminNotification } = require('../email').comments
-const { appendReplies } = require('../services')
+const { sendVerificationEmail, sendAdminNotificationEmail } = require('../../services').emails
+const { appendReplies } = require('../../services').transformers
 
 class CommentsController {
     /**
@@ -75,7 +75,7 @@ class CommentsController {
                 return res.status(500).json({ message: "Comment could not be verified" })
             }
             // TODO: RETURN A VIEW
-            await sendAdminNotification(rows[0])
+            await sendAdminNotificationEmail(rows[0])
             return res.render('comment-verified')
         } catch (err) {
 

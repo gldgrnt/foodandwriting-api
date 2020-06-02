@@ -1,1 +1,0 @@
-exports.comments = require('./comments')

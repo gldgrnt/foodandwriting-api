@@ -1,6 +1,3 @@
-/**
- * Helper to seed dev db tables
- */
 const db = require('../db')
 const { nanoid } = require('nanoid')
 const { isProduction } = require('../config')

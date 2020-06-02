@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors()) // TODO configure cors
 app.use('/static', express.static('static'))
 app.set('view engine', 'pug')
-app.set('views', 'app/views/pages/templates')
+app.set('views', 'views/pages/templates')
 
 // Routes
 app.get('/', (req, res) => { res.json({ info: "Food and Writing API" }) })

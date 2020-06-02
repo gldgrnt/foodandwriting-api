@@ -1,5 +1,5 @@
-const db = require('../db')
 const { nanoid } = require('nanoid')
+const db = require('../../db')
 
 class CommentsModel {
     constructor() {

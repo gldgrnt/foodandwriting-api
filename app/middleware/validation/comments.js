@@ -1,7 +1,7 @@
 const { param, body } = require('express-validator')
-const { validate } = require('../../helpers').validation
+const { validate } = require('../../../helpers').validation
 
-exports.addComment = validate([
+exports.validateComment = validate([
     body('displayName').notEmpty().isString().escape().trim(),
     body('email').notEmpty().isEmail(),
     body('postId').notEmpty().isString().trim(),
@@ -9,14 +9,6 @@ exports.addComment = validate([
     body('text').notEmpty().escape().trim()
 ])
 
-exports.verifyComment = validate([
+exports.validateCommentId = validate([
     param('id').notEmpty().isString()
-])
-
-exports.approveComment = validate([
-    param('id').notEmpty().toInt()
-])
-
-exports.deleteComment = validate([
-    param('id').notEmpty().toInt()
 ])
