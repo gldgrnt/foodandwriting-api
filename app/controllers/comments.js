@@ -74,10 +74,9 @@ class CommentsController {
             if (!rows.length || rows[0].id !== id || rows[0].verified !== true) {
                 return res.status(500).json({ message: "Comment could not be verified" })
             }
-
-            await sendAdminNotification(row[0])
             // TODO: RETURN A VIEW
-            return res.status(200).json({ message: "Comment verified" })
+            await sendAdminNotification(rows[0])
+            return res.render('comment-verified')
         } catch (err) {
 
         }

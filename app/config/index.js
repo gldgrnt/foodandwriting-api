@@ -13,7 +13,7 @@ module.exports = {
         url: process.env.DATABASE_URL
     },
     urls: {
-        api: process.env.APP_URL,
+        app: process.env.APP_URL,
         site: process.env.SITE_URL,
         studio: process.env.STUDIO_URL,
     },
