@@ -9,6 +9,10 @@ exports.addComment = validate([
     body('text').notEmpty().escape().trim()
 ])
 
+exports.verifyComment = validate([
+    param('id').notEmpty().isString()
+])
+
 exports.approveComment = validate([
     param('id').notEmpty().toInt()
 ])

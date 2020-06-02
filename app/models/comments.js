@@ -49,6 +49,20 @@ class CommentsModel {
     }
 
     /**
+     * Verify comment
+     */
+    async verify(id) {
+        const queryString = `
+            UPDATE ${this.table} 
+            SET verified = TRUE 
+            WHERE id = $1 
+            RETURNING id, verified, post_slug;
+        `
+        const params = [id]
+        return this.db.query(queryString, params)
+    }
+
+    /**
      * Approve comment
      */
     async approve(id) {
