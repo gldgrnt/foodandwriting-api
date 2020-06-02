@@ -1,5 +1,5 @@
 const { CommentsModel, RepliesModel } = require('../models')
-const { sendVerificationEmail } = require('../email').comments
+const { sendVerificationEmail, sendAdminNotification } = require('../email').comments
 const { appendReplies } = require('../services')
 
 class CommentsController {
@@ -59,6 +59,27 @@ class CommentsController {
             return res.status(201).json({ message: "Comment created" })
         } catch (err) {
             throw err
+        }
+    }
+
+    /**
+     * Verify comment
+     */
+    async verifyComment(req, res) {
+        try {
+            const { id } = req.params
+            const comments = new CommentsModel()
+            const { rows } = await comments.verify(id)
+
+            if (!rows.length || rows[0].id !== id || rows[0].verified !== true) {
+                return res.status(500).json({ message: "Comment could not be verified" })
+            }
+
+            await sendAdminNotification(row[0])
+            // TODO: RETURN A VIEW
+            return res.status(200).json({ message: "Comment verified" })
+        } catch (err) {
+
         }
     }
 
