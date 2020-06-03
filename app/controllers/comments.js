@@ -125,16 +125,17 @@ class CommentsController {
     async deleteComment(req, res) {
         const { id } = req.params
         const comments = new CommentsModel()
-        const { rows } = await comments.delete(id)
-
-        if (!rows.length) {
+        // Check comment exists
+        const check = await comments.checkById(id)
+        if (!check.rows.length || check.rows[0].id !== id) {
+            return res.status(410).json({ message: "Comment doesn't exits or has already deleted" })
+        }
+        // Delete the comment
+        const deleted = await comments.delete(id)
+        if (!deleted.rows.length) {
             return res.status(500).json({ message: "Comment could not be deleted" })
         }
-
-        if (parseInt(rows[0].count) !== 1) {
-            return res.status(409).json({ message: "Comment has already been deleted / or doesn't exist" })
-        }
-
+        // Send success
         return res.sendStatus(200)
     }
 }
