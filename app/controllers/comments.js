@@ -57,7 +57,7 @@ class CommentsController {
             }
             // Send verification email
             await sendVerificationEmail(rows[0])
-            return res.status(201).json({ message: "Comment created" })
+            return res.sendStatus(201)
         } catch (err) {
             throw err
         }
@@ -70,14 +70,20 @@ class CommentsController {
         try {
             const { id } = req.params
             const comments = new CommentsModel()
-            const { rows } = await comments.verify(id)
-            // Check if comment was verified
-            if (!rows.length || rows[0].id !== id || rows[0].verified !== true) {
-                return res.status(500).json({ message: "Comment could not be verified" })
+            // Check comment exists
+            const check = await comments.checkById(id)
+            if (!check.rows || check.rows[0].id !== id) {
+                return res.status(404).json({ message: 'Not found' })
             }
-            // Send admin notification
-            // await sendAdminNotificationEmail(rows[0])
-            return res.render('comment-verified', { appUrl: config.urls.app })
+            // Check if comment has alredy been verified - to avoid sending duplicated admin emails
+            const isVerified = await comments.checkVerifiedById(id)
+            if (isVerified.rows.length > 0) {
+                return res.render('comment-verified', { appUrl: config })
+            }
+            // Send admin email
+            const verified = await comments.verify(id)
+            await sendAdminNotificationEmail(verified.rows[0])
+            return res.render('comment-verified', { appUrl: config })
         } catch (err) {
 
         }
@@ -95,7 +101,7 @@ class CommentsController {
             return res.status(500).json({ message: "Comment could not be approved" })
         }
 
-        return res.status(200).json({ message: "Comment approved" })
+        return res.sendStatus(200)
     }
 
     /**
@@ -114,7 +120,7 @@ class CommentsController {
             return res.status(409).json({ message: "Comment has already been deleted / or doesn't exist" })
         }
 
-        return res.status(200).json({ message: "Comment deleted" })
+        return res.sendStatus(200)
     }
 }
 
