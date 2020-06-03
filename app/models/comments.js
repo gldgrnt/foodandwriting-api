@@ -62,9 +62,9 @@ class CommentsModel {
     /**
      * Check if a comment is verified
      */
-    async checkVerifiedById(id) {
+    async checkByCol(id, col, value) {
         const queryString = `
-            SELECT * FROM ${this.table} WHERE id = $1 AND verified = TRUE;
+            SELECT * FROM ${this.table} WHERE id = $1 AND ${col} = ${value};
         `
         const params = [id]
         return this.db.query(queryString, params)
@@ -78,7 +78,7 @@ class CommentsModel {
             UPDATE ${this.table} 
             SET verified = TRUE 
             WHERE id = $1
-            RETURNING id, verified, post_slug;
+            RETURNING id, post_slug, verified;
         `
         const params = [id]
         return this.db.query(queryString, params)
@@ -92,7 +92,7 @@ class CommentsModel {
             UPDATE ${this.table} 
             SET approved = TRUE 
             WHERE id = $1 
-            RETURNING id, approved;
+            RETURNING id, post_slug, email, approved;
         `
         const params = [id]
         return this.db.query(queryString, params)

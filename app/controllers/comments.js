@@ -1,5 +1,5 @@
 const { CommentsModel, RepliesModel } = require('../models')
-const { sendVerificationEmail, sendAdminNotificationEmail } = require('../../services').emails
+const { sendVerificationEmail, sendApprovalEmail, sendAdminNotificationEmail } = require('../../services').emails
 const { appendReplies } = require('../../services').transformers
 const config = require('../../config')
 
@@ -72,16 +72,20 @@ class CommentsController {
             const comments = new CommentsModel()
             // Check comment exists
             const check = await comments.checkById(id)
-            if (!check.rows || check.rows[0].id !== id) {
-                return res.status(404).json({ message: 'Not found' })
+            if (!check.rows.length || check.rows[0].id !== id) {
+                return res.status(404).json({ message: 'Comment not found' })
             }
             // Check if comment has alredy been verified - to avoid sending duplicated admin emails
-            const isVerified = await comments.checkVerifiedById(id)
-            if (isVerified.rows.length > 0) {
+            const isVerified = await comments.checkByCol(id, 'verified', 'TRUE')
+            if (isVerified.rows.length) {
                 return res.render('comment-verified', { appUrl: config })
             }
-            // Send admin email
+            // Verify comment and check it
             const verified = await comments.verify(id)
+            if (!verified.rows.length || verified.rows[0].verified !== true || verified.rows[0].id !== id) {
+                return res.sendStatus(500).json({ message: 'Comment could not be verified' })
+            }
+            // Send email
             await sendAdminNotificationEmail(verified.rows[0])
             return res.render('comment-verified', { appUrl: config })
         } catch (err) {
@@ -95,12 +99,23 @@ class CommentsController {
     async approveComment(req, res) {
         const { id } = req.params
         const comments = new CommentsModel()
-        const { rows } = await comments.approveComment(id)
-
-        if (!rows.length || rows[0].id !== id || rows[0].approved !== true) {
-            return res.status(500).json({ message: "Comment could not be approved" })
+        // Check comment exists
+        const check = await comments.checkById(id)
+        if (!check.rows.length || check.rows[0].id !== id) {
+            return res.status(404).json({ message: 'Comment not found' })
         }
-
+        // Check if comment is already approved - to avoid sending duplicate emails
+        const isApproved = await comments.checkByCol(id, 'approved', 'TRUE')
+        if (isApproved.rows.length) {
+            return res.status(200).json({ message: 'Comment already approved' })
+        }
+        // Approve comment and check it
+        const approved = await comments.approve(id)
+        if (!approved.rows.length || approved.rows[0].approved !== true || approved.rows[0].id !== id) {
+            return res.sendStatus(500).json({ message: 'Comment could not be approved' })
+        }
+        // Send email
+        await sendApprovalEmail(approved.rows[0])
         return res.sendStatus(200)
     }
 
