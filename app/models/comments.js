@@ -49,13 +49,35 @@ class CommentsModel {
     }
 
     /**
+     * Check if a comment exists
+     */
+    async checkById(id) {
+        const queryString = `
+            SELECT * FROM ${this.table} WHERE id = $1;
+        `
+        const params = [id]
+        return this.db.query(queryString, params)
+    }
+
+    /**
+     * Check if a comment is verified
+     */
+    async checkVerifiedById(id) {
+        const queryString = `
+            SELECT * FROM ${this.table} WHERE id = $1 AND verified = TRUE;
+        `
+        const params = [id]
+        return this.db.query(queryString, params)
+    }
+
+    /**
      * Verify comment
      */
     async verify(id) {
         const queryString = `
             UPDATE ${this.table} 
             SET verified = TRUE 
-            WHERE id = $1 
+            WHERE id = $1
             RETURNING id, verified, post_slug;
         `
         const params = [id]
