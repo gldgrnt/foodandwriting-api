@@ -5,6 +5,7 @@ class RepliesModel {
     constructor() {
         this.db = db
         this.table = 'replies'
+        this.foreignTable = 'comments'
         this.id = nanoid()
     }
 
@@ -24,7 +25,7 @@ class RepliesModel {
      * Select by comment id
      * @param commentIds String form of arary of comment ids
      */
-    async selectByCommentId(commentIds) {
+    async selectByCommentIds(commentIds) {
         const queryString = `
             SELECT *
             FROM ${this.table} 
@@ -32,6 +33,20 @@ class RepliesModel {
             ORDER BY date DESC;
         `
         return this.db.query(queryString)
+    }
+
+    /**
+     * Add a reply
+     */
+    async add({ text, commentId }) {
+        // TODO: return slug of corresponding comment
+        const queryString = `
+            INSERT INTO ${this.table} (text, comment_id)
+            VALUES ($1, $2)
+            RETURNING id;
+        `
+        const params = [text, commentId]
+        return this.db.query(queryString, params)
     }
 }
 

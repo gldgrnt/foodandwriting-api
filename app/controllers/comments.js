@@ -34,7 +34,7 @@ class CommentsController {
             const selectedComments = await comments.selectByPostId(postId)
             // Get associated replies
             const selectedCommentsString = selectedComments.rows.map(comment => `'${comment.id}'`).toString()
-            const selectedReplies = await replies.selectByCommentId(selectedCommentsString)
+            const selectedReplies = await replies.selectByCommentIds(selectedCommentsString)
             // Append replies
             const data = appendReplies(selectedComments, selectedReplies)
             return res.status(200).json(data)
@@ -115,7 +115,6 @@ class CommentsController {
             return res.sendStatus(500).json({ message: 'Comment could not be approved' })
         }
         // Send email
-        await sendApprovalEmail(approved.rows[0])
         return res.sendStatus(200)
     }
 
