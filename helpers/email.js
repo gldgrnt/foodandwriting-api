@@ -56,5 +56,5 @@ exports.sendEmail = async (emailConfig) => {
     // Add variables local variables
     emailConfig.locals = addLocalVariables(emailConfig.locals)
     await email.send(emailConfig)
-    console.log('Email sent')
+    console.log(`${emailConfig.template} email sent`)
 }
