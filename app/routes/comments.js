@@ -3,16 +3,20 @@ const { CommentsController } = require('../controllers')
 const { commentValidation } = require('../middleware').validation
 const { okta } = require('../middleware').authentication
 
+// Destructure methods
+const { verifyToken } = okta
+const { validateComment, validateCommentId } = commentValidation
+
 // Instatiate objects
-const commentsController = new CommentsController()
+const controller = new CommentsController()
 const router = new Router() // Instantiate express router with promise functionality
 
 // Define routes
-router.get('/', [okta.verifyToken], commentsController.getAll)
-router.get('/:postId', [okta.verifyToken], commentsController.getCommentsByPostId)
-router.post('/', [okta.verifyToken, commentValidation.validateComment], commentsController.addComment)
-router.get('/v/:id', [commentValidation.validateCommentId], commentsController.verifyComment)
-router.put('/a/:id', [okta.verifyToken, commentValidation.validateCommentId], commentsController.approveComment)
-router.delete('/:id', [okta.verifyToken, commentValidation.validateCommentId], commentsController.deleteComment)
+router.get('/', [verifyToken], controller.getAll)
+router.get('/:postId', [verifyToken], controller.getCommentsByPostId)
+router.post('/', [verifyToken, validateComment], controller.addComment)
+router.get('/v/:id', [validateCommentId], controller.verifyComment)
+router.put('/a/:id', [verifyToken, validateCommentId], controller.approveComment)
+router.delete('/:id', [verifyToken, validateCommentId], controller.deleteComment)
 
 module.exports = router
