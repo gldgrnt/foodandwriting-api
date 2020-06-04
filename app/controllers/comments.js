@@ -1,6 +1,7 @@
 const { CommentsModel, RepliesModel } = require('../models')
-const { sendVerificationEmail, sendApprovalEmail, sendAdminNotificationEmail } = require('../../services').emails
+const { sendVerificationEmail, sendAdminNotificationEmail } = require('../../services').emails
 const { appendReplies } = require('../../services').transformers
+const { addPugLocals } = require('../../helpers').pug
 const config = require('../../config')
 
 class CommentsController {
@@ -78,7 +79,7 @@ class CommentsController {
             // Check if comment has alredy been verified - to avoid sending duplicated admin emails
             const isVerified = await comments.checkByCol(id, 'verified', 'TRUE')
             if (isVerified.rows.length) {
-                return res.render('comment-verified', { appUrl: config })
+                return res.render('comment-verified', addPugLocals())
             }
             // Verify comment and check it
             const verified = await comments.verify(id)
@@ -87,7 +88,7 @@ class CommentsController {
             }
             // Send email
             await sendAdminNotificationEmail(verified.rows[0])
-            return res.render('comment-verified', { appUrl: config })
+            return res.render('comment-verified', addPugLocals())
         } catch (err) {
 
         }
