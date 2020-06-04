@@ -2,6 +2,7 @@ const Email = require('email-templates')
 const nodemailer = require('nodemailer')
 const path = require('path')
 const config = require('../config')
+const { addPugLocals } = require('./pug')
 
 // Create transport
 const transport = nodemailer.createTransport({
@@ -31,18 +32,6 @@ const email = new Email({
     // send: true
 })
 
-// Add local variables
-const addLocalVariables = (locals) => {
-    const { urls } = config
-
-    return {
-        ...locals,
-        appUrl: urls.app,
-        siteUrl: urls.site,
-        studioUrl: urls.studio,
-    }
-}
-
 /**
  * Helper to semd email - info logged in dev environment
  * @param {Object} emailConfig Email config
@@ -54,7 +43,7 @@ const addLocalVariables = (locals) => {
  */
 exports.sendEmail = async (emailConfig) => {
     // Add variables local variables
-    emailConfig.locals = addLocalVariables(emailConfig.locals)
+    emailConfig.locals = addPugLocals(emailConfig.locals)
     await email.send(emailConfig)
     console.log(`${emailConfig.template} email sent`)
 }
