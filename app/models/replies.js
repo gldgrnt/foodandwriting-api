@@ -23,7 +23,7 @@ class RepliesModel {
 
     /**
      * Select by comment id
-     * @param commentIds String form of arary of comment ids
+     * @param commentIds String form of array of comment ids
      */
     async selectByCommentIds(commentIds) {
         const queryString = `
@@ -39,13 +39,17 @@ class RepliesModel {
      * Add a reply
      */
     async add({ text, commentId }) {
-        // TODO: return slug of corresponding comment
         const queryString = `
-            INSERT INTO ${this.table} (text, comment_id)
-            VALUES ($1, $2)
-            RETURNING id;
+            WITH added AS (
+                INSERT INTO ${this.table} (id, text, comment_id)
+                VALUES ($1, $2, $3)
+                RETURNING *
+            )
+            SELECT id, email, post_slug 
+            FROM ${this.foreignTable}
+            WHERE id = ( SELECT comment_id FROM added );
         `
-        const params = [text, commentId]
+        const params = [this.id, text, commentId]
         return this.db.query(queryString, params)
     }
 }
