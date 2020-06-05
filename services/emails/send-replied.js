@@ -1,7 +1,7 @@
 const { sendEmail } = require('../../helpers').email
 
 /**
- * Send approved email to user
+ * Send replied email to user
  * @param {object} row Database row
  * @param {string} row.post_slug Recipient email address
  * @param {string} row.email Recipient email address
@@ -9,7 +9,7 @@ const { sendEmail } = require('../../helpers').email
  * @returns {Promise} Call sendEmail 
  */
 module.exports = async ({ email, id, post_slug }) => {
-    const template = 'comment-approved'
+    const template = 'comment-replied'
     const message = {
         to: email,
         from: '"Food and writing" <info@foodandwriting.co.uk>'

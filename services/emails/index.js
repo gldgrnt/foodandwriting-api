@@ -1,3 +1,3 @@
 exports.sendVerificationEmail = require('./send-verification')
-exports.sendApprovalEmail = require('./send-approval')
+exports.sendRepliedEmail = require('./send-replied')
 exports.sendAdminNotificationEmail = require('./send-admin-notification')
