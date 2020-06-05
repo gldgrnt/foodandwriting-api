@@ -128,7 +128,7 @@ class CommentsController {
         // Check comment exists
         const check = await comments.checkById(id)
         if (!check.rows.length || check.rows[0].id !== id) {
-            return res.status(410).json({ message: "Comment doesn't exits or has already deleted" })
+            return res.status(410).json({ message: "Comment doesn't exist or has already deleted" })
         }
         // Delete the comment
         const deleted = await comments.delete(id)
