@@ -35,7 +35,7 @@ class CommentsController {
             const selectedComments = await comments.selectByPostId(postId)
             // Get associated replies
             const selectedCommentsString = selectedComments.rows.map(comment => `'${comment.id}'`).toString()
-            const selectedReplies = await replies.selectByCommentIds(selectedCommentsString)
+            const selectedReplies = await replies.selectFromCommentIds(selectedCommentsString)
             // Append replies
             const data = appendReplies(selectedComments, selectedReplies)
             return res.status(200).json(data)
@@ -90,7 +90,7 @@ class CommentsController {
             await sendAdminNotificationEmail(verified.rows[0])
             return res.render('comment-verified', addPugLocals())
         } catch (err) {
-
+            throw err
         }
     }
 
@@ -98,45 +98,53 @@ class CommentsController {
      * Approve a comment
      */
     async approveComment(req, res) {
-        const { id } = req.params
-        const comments = new CommentsModel()
-        // Check comment exists
-        const check = await comments.checkById(id)
-        if (!check.rows.length || check.rows[0].id !== id) {
-            return res.status(404).json({ message: 'Comment not found' })
+        try {
+            const { id } = req.params
+            const comments = new CommentsModel()
+            // Check comment exists
+            const check = await comments.checkById(id)
+            if (!check.rows.length || check.rows[0].id !== id) {
+                return res.status(404).json({ message: 'Comment not found' })
+            }
+            // Check if comment is already approved - to avoid sending duplicate emails
+            const isApproved = await comments.checkByCol(id, 'approved', 'TRUE')
+            if (isApproved.rows.length) {
+                return res.status(200).json({ message: 'Comment already approved' })
+            }
+            // Approve comment and check it
+            const approved = await comments.approve(id)
+            if (!approved.rows.length || approved.rows[0].approved !== true || approved.rows[0].id !== id) {
+                return res.sendStatus(500).json({ message: 'Comment could not be approved' })
+            }
+            // Send email
+            return res.sendStatus(200)
+        } catch (err) {
+            throw err
         }
-        // Check if comment is already approved - to avoid sending duplicate emails
-        const isApproved = await comments.checkByCol(id, 'approved', 'TRUE')
-        if (isApproved.rows.length) {
-            return res.status(200).json({ message: 'Comment already approved' })
-        }
-        // Approve comment and check it
-        const approved = await comments.approve(id)
-        if (!approved.rows.length || approved.rows[0].approved !== true || approved.rows[0].id !== id) {
-            return res.sendStatus(500).json({ message: 'Comment could not be approved' })
-        }
-        // Send email
-        return res.sendStatus(200)
     }
 
     /**
      * Delete comment
      */
     async deleteComment(req, res) {
-        const { id } = req.params
-        const comments = new CommentsModel()
-        // Check comment exists
-        const check = await comments.checkById(id)
-        if (!check.rows.length || check.rows[0].id !== id) {
-            return res.status(410).json({ message: "Comment doesn't exist or has already deleted" })
+        try {
+            const { id } = req.params
+            const comments = new CommentsModel()
+            // Check comment exists
+            const check = await comments.checkById(id)
+            if (!check.rows.length || check.rows[0].id !== id) {
+                return res.status(410).json({ message: "Comment doesn't exist or has already deleted" })
+            }
+            // Delete the comment
+            const deleted = await comments.delete(id)
+            if (!deleted.rows.length) {
+                return res.status(500).json({ message: "Comment could not be deleted" })
+            }
+            // Send success
+            return res.sendStatus(200)
+        } catch (err) {
+            throw err
         }
-        // Delete the comment
-        const deleted = await comments.delete(id)
-        if (!deleted.rows.length) {
-            return res.status(500).json({ message: "Comment could not be deleted" })
-        }
-        // Send success
-        return res.sendStatus(200)
     }
 }
 
