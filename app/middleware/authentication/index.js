@@ -1,1 +1,1 @@
-exports.okta = require('./okta')
+exports.apiKey = require('./api-key')
