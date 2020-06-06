@@ -1,19 +1,22 @@
 const Router = require('express-promise-router')
 const { RepliesController } = require('../controllers')
 const { repliesValidation } = require('../middleware').validation
-const { okta } = require('../middleware').authentication
+const { apiKey } = require('../middleware').authentication
 
 // Destructure methods
-const { verifyToken } = okta
+const { authenticateApiKey } = apiKey
 const { validateReply, validateReplyUpdate, validateReplyId } = repliesValidation
 
 // Instatiate objects
 const controller = new RepliesController()
-const router = new Router() // Instantiate express router with promise functionality
+const router = new Router()
+
+// Use apiKey middleware for all routes
+router.use(authenticateApiKey)
 
 // Define routes
-router.post('/', [verifyToken, validateReply], controller.addReply)
-router.put('/', [verifyToken, validateReplyUpdate], controller.updateReply)
-router.delete('/:id', [verifyToken, validateReplyId], controller.deleteReply)
+router.post('/', [validateReply], controller.addReply)
+router.put('/', [validateReplyUpdate], controller.updateReply)
+router.delete('/:id', [validateReplyId], controller.deleteReply)
 
 module.exports = router

@@ -9,6 +9,8 @@ if (env.error) {
 }
 
 module.exports = {
+    isProduction: process.env.NODE_ENV === 'production',
+    apiKey: process.env.API_KEY,
     db: {
         url: process.env.DATABASE_URL
     },
@@ -19,7 +21,6 @@ module.exports = {
     },
     server: {
         port: process.env.PORT,
-        isProduction: process.env.NODE_ENV === 'production'
     },
     okta: {
         clientId: process.env.OKTA_CLIENT_ID,
