@@ -12,8 +12,8 @@ const seedTablesQuery = `
     INSERT INTO comments
         (id, display_name, email, post_id, post_slug, text)
     VALUES
-        ('${exampleId}', 'First commenter', 'commenter@email.com', '1', '/post-1', 'This is a comment'),
-        ('${nanoid()}', 'Another commenter', 'commenter@email.com', '2', '/post-2', 'This is another comment');
+        ('${exampleId}', 'First commenter', 'commenter@email.com', '0ed39902-72ef-4409-9e30-9db4e8701c4c', '/recipes/turnip-potato-and-mustard-crumble', 'This is a comment'),
+        ('${nanoid()}', 'Another commenter', 'commenter@email.com', '343cc865-f6d8-4c9e-9eae-45d9fe29e182', '/recipes/larb-thai-pork-salad-in-cabbage-cups', 'This is another comment');
 
     INSERT INTO replies
         (id, text, comment_id)
