@@ -16,6 +16,7 @@ router.use(authenticateApiKey)
 
 // Define routes
 router.get('/', controller.getAll)
+// router.get('/posts/', controller.getAllPostIds) => { post: string, commentsTotal: integer, repliesTotal: integer }
 router.get('/:postId', controller.getCommentsByPostId)
 router.post('/', [validateComment], controller.addComment)
 router.get('/v/:id', [validateCommentId], controller.verifyComment)
