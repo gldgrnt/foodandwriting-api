@@ -15,6 +15,10 @@ class CommentsController {
             // Get all rows
             const allComments = await comments.selectAll()
             const allReplies = await replies.selectAll()
+            // Check for emptiness
+            if (!allComments.rows.length) {
+                return res.status(204).json({ message: "No comments found" })
+            }
             // Append replies
             const data = appendReplies(allComments, allReplies)
             return res.status(200).json(data)
@@ -24,7 +28,22 @@ class CommentsController {
     }
 
     /**
-     * Get comment by page
+     * Get all post ids
+     */
+    async getAllPosts(req, res) {
+        try {
+            const comments = new CommentsModel()
+            // Get number of comments per post_id
+            const { rows } = await comments.selectAllPosts()
+            // Get number of replies per postId
+            return res.status(200).json(rows)
+        } catch (err) {
+            throw err
+        }
+    }
+
+    /**
+     * Get comment by post ids
      */
     async getCommentsByPostId(req, res) {
         try {

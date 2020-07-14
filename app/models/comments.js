@@ -21,6 +21,34 @@ class CommentsModel {
     }
 
     /**
+     * Select all post ids
+     */
+    async selectAllPosts() {
+        const queryString = `
+            SELECT posts.post_id, (
+                SELECT date
+                FROM ${this.table}
+                WHERE post_id = posts.post_id
+                ORDER BY date DESC LIMIT 1
+            ),
+            (
+                SELECT count(*) as comments_no
+                FROM ${this.table}
+                WHERE post_id = posts.post_id
+            ),
+            (
+                SELECT count(replies) as replies_no
+            )
+            FROM ( SELECT DISTINCT post_id FROM ${this.table} ) posts
+            INNER JOIN ${this.table} comments ON comments.post_id = posts.post_id
+            FULL JOIN replies ON comments.id = replies.comment_id
+            GROUP BY posts.post_id
+            ORDER BY date DESC
+        `
+        return this.db.query(queryString)
+    }
+
+    /**
      * Select by post id
      */
     async selectByPostId(postId) {
